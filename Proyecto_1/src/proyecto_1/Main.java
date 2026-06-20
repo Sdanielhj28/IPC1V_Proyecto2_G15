@@ -21,9 +21,7 @@ public class Main {
         int opcion;
 
         do {
-            System.out.println("\n=================================");
-            System.out.println("      PONCHITRUCK CORE");
-            System.out.println("=================================");
+            System.out.println("PONCHITRUCK CORE");
             System.out.println("1. CRUD de Vehiculos");
             System.out.println("2. Ordenes de Envio");
             System.out.println("3. Simulacion en el Mapa");
@@ -73,14 +71,12 @@ public class Main {
         } while (opcion != 0);
     }
 
-    // =========================================================
     //                  MENÚ CRUD VEHÍCULOS
-    // =========================================================
     public static void menuVehiculos() {
         int opcion;
 
         do {
-            System.out.println("\n===== CRUD DE VEHICULOS =====");
+            System.out.println("CRUD DE VEHICULOS");
             System.out.println("1. Carga masiva (vehiculos.csv)");
             System.out.println("2. Ingreso manual");
             System.out.println("3. Modificar vehiculo");
@@ -127,7 +123,7 @@ public class Main {
     //              1. CARGA MASIVA DESDE CSV
     // =========================================================
     public static void cargaMasivaCSV() {
-        System.out.println("\n===== CARGA MASIVA DESDE vehiculos.csv =====");
+        System.out.println("CARGA MASIVA DESDE vehiculos.csv");
         System.out.print("Ingrese la ruta del archivo vehiculos.csv: ");
         String ruta = sc.nextLine().trim();
 
@@ -190,11 +186,9 @@ public class Main {
             }
 
             br.close();
-            System.out.println("----------------------------------------");
             System.out.println("Carga finalizada.");
             System.out.println("Vehiculos registrados : " + registrados);
             System.out.println("Registros omitidos    : " + omitidos);
-            System.out.println("----------------------------------------");
 
         } catch (java.io.FileNotFoundException e) {
             System.out.println("Error: no se encontro el archivo en la ruta indicada.");
@@ -205,12 +199,10 @@ public class Main {
         }
     }
 
-    // =========================================================
     //              2. INGRESO MANUAL (ya existía)
-    // =========================================================
     public static void ingresarVehiculoManual() {
         try {
-            System.out.println("\n===== INGRESO MANUAL DE VEHICULO =====");
+            System.out.println("INGRESO MANUAL DE VEHICULO");
 
             System.out.print("ID: ");
             String id = sc.nextLine();
@@ -249,13 +241,11 @@ public class Main {
             System.out.println("Error: dato invalido.");
         }
     }
-
-    // =========================================================
+    
     //              3. MODIFICAR VEHÍCULO
-    // =========================================================
     public static void modificarVehiculo() {
         try {
-            System.out.println("\n===== MODIFICAR VEHICULO =====");
+            System.out.println("MODIFICAR VEHICULO");
             System.out.print("Ingrese el ID del vehiculo a modificar: ");
             String id = sc.nextLine().trim();
 
@@ -305,12 +295,10 @@ public class Main {
         }
     }
 
-    // =========================================================
     //              4. ELIMINAR VEHÍCULO (con desplazamiento)
-    // =========================================================
     public static void eliminarVehiculo() {
         try {
-            System.out.println("\n===== ELIMINAR VEHICULO =====");
+            System.out.println("ELIMINAR VEHICULO");
             System.out.print("Ingrese el ID del vehiculo a eliminar: ");
             String id = sc.nextLine().trim();
 
@@ -342,9 +330,7 @@ public class Main {
         }
     }
 
-    // =========================================================
     //              UTILIDADES
-    // =========================================================
     public static int buscarVehiculoPorId(String id) {
         for (int i = 0; i < vehiculos.length; i++) {
             if (vehiculos[i] != null && vehiculos[i].getId().equalsIgnoreCase(id)) {
@@ -355,13 +341,12 @@ public class Main {
     }
 
     public static void mostrarVehiculos() {
-        System.out.println("\n===== LISTADO DE VEHICULOS =====");
+        System.out.println("LISTADO DE VEHICULOS");
         boolean hayVehiculos = false;
 
         for (int i = 0; i < vehiculos.length; i++) {
             if (vehiculos[i] != null) {
                 hayVehiculos = true;
-                System.out.println("--------------------------------");
                 System.out.println("ID       : " + vehiculos[i].getId());
                 System.out.println("Marca    : " + vehiculos[i].getMarca());
                 System.out.println("Modelo   : " + vehiculos[i].getModelo());
@@ -376,9 +361,7 @@ public class Main {
         }
     }
 
-    // =========================================================
     //         MÓDULOS PENDIENTES (mañana)
-    // =========================================================
 
     public static void menuOrdenes() {
     int opcion;
@@ -387,6 +370,9 @@ public class Main {
         System.out.println("\n===== ORDENES DE ENVIO =====");
         System.out.println("1. Crear orden");
         System.out.println("2. Mostrar ordenes");
+        System.out.println("3. Asignar pedido a vehiculo");
+        System.out.println("4. Modificar orden");
+        System.out.println("5. Desasignar pedido");
         System.out.println("0. Regresar");
         System.out.print("Seleccione una opcion: ");
 
@@ -399,6 +385,15 @@ public class Main {
                     break;
                 case 2:
                     mostrarOrdenes();
+                    break;
+                case 3:
+                    asignarPedido();
+                    break;
+                case 4:
+                    modificarOrden();
+                    break;
+                case 5:
+                    desasignarPedido();
                     break;
                 case 0:
                     System.out.println("Regresando al menu principal...");
@@ -468,7 +463,7 @@ public class Main {
     return -1;
 }
     public static void mostrarOrdenes() {
-    System.out.println("\n===== LISTADO DE ORDENES =====");
+    System.out.println("LISTADO DE ORDENES");
 
     boolean hayOrdenes = false;
 
@@ -491,8 +486,206 @@ public class Main {
     }
 }
 
+    //         ASIGNACION DE PEDIDOS (Regla 1: control de peso)
+    public static void asignarPedido() {
+    try {
+        System.out.println("ASIGNAR PEDIDO A VEHICULO");
+        System.out.print("Ingrese el ID de la orden (debe estar Pendiente): ");
+        String idOrden = sc.nextLine().trim();
+
+        int idxOrden = buscarOrdenPorId(idOrden);
+
+        if (idxOrden == -1) {
+            System.out.println("Error: no se encontro ninguna orden con ese ID.");
+            return;
+        }
+
+        Orden orden = ordenes[idxOrden];
+
+        if (!orden.getEstado().equalsIgnoreCase("Pendiente")) {
+            System.out.println("Error: la orden debe estar en estado 'Pendiente' para poder asignarla.");
+            return;
+        }
+
+        System.out.print("Ingrese el ID del vehiculo (debe estar Disponible): ");
+        String idVehiculo = sc.nextLine().trim();
+
+        int idxVehiculo = buscarVehiculoPorId(idVehiculo);
+
+        if (idxVehiculo == -1) {
+            System.out.println("Error: no se encontro ningun vehiculo con ese ID.");
+            return;
+        }
+
+        Vehiculo vehiculo = vehiculos[idxVehiculo];
+
+        if (!vehiculo.getEstado().equalsIgnoreCase("Disponible")) {
+            System.out.println("Error: el vehiculo debe estar 'Disponible' para poder asignarle un pedido.");
+            return;
+        }
+
+        // Regla 1: peso del nuevo pedido + suma de pesos ya acumulados en ese camion < capacidad maxima
+        double cargaAcumulada = 0;
+        for (int i = 0; i < ordenes.length; i++) {
+            if (ordenes[i] != null
+                    && ordenes[i].getIdVehiculoAsignado() != null
+                    && ordenes[i].getIdVehiculoAsignado().equalsIgnoreCase(vehiculo.getId())) {
+                cargaAcumulada += ordenes[i].getPesoPaquete();
+            }
+        }
+
+        double pesoTotal = cargaAcumulada + orden.getPesoPaquete();
+
+        if (pesoTotal > vehiculo.getCapacidadMax()) {
+            System.out.println("ALERTA DE SOBRECARGA: No se puede asignar el pedido.");
+            System.out.println("Carga acumulada actual : " + cargaAcumulada + " kg");
+            System.out.println("Peso del nuevo pedido   : " + orden.getPesoPaquete() + " kg");
+            System.out.println("Capacidad maxima        : " + vehiculo.getCapacidadMax() + " kg");
+            System.out.println("Total resultante        : " + pesoTotal + " kg (supera la capacidad)");
+            return;
+        }
+
+        // Validacion correcta -> se asigna
+        orden.setIdVehiculoAsignado(vehiculo.getId());
+        orden.setEstado("Asignada");
+
+        System.out.println("Pedido asignado correctamente.");
+        System.out.println("Orden " + orden.getIdOrden() + " -> Vehiculo " + vehiculo.getId());
+        System.out.println("Carga total del vehiculo ahora: " + pesoTotal + " kg / " + vehiculo.getCapacidadMax() + " kg");
+
+    } catch (Exception e) {
+        System.out.println("Error inesperado: " + e.getMessage());
+    }
+}
+
+    //         MODIFICACION DE ORDENES (Regla 2)
+    public static void modificarOrden() {
+    try {
+        System.out.println("MODIFICAR ORDEN");
+        System.out.print("Ingrese el ID de la orden a modificar: ");
+        String idOrden = sc.nextLine().trim();
+
+        int idx = buscarOrdenPorId(idOrden);
+
+        if (idx == -1) {
+            System.out.println("Error: no se encontro ninguna orden con ese ID.");
+            return;
+        }
+
+        Orden orden = ordenes[idx];
+
+        // Regla 2: solo se puede modificar libremente si esta "Pendiente"
+        if (!orden.getEstado().equalsIgnoreCase("Pendiente")) {
+            System.out.println("Operacion denegada: la orden esta en estado '" + orden.getEstado() + "'.");
+            System.out.println("Solo se pueden modificar ordenes en estado 'Pendiente'.");
+            System.out.println("Si la orden esta 'Asignada', primero debe Desasignar el pedido.");
+            return;
+        }
+
+        System.out.println("Orden encontrada: " + orden.getDescripcion());
+        System.out.println("Deje en blanco los campos que NO desea modificar.");
+
+        System.out.print("Nueva descripcion [" + orden.getDescripcion() + "]: ");
+        String descripcion = sc.nextLine().trim();
+        if (!descripcion.isEmpty()) orden.setDescripcion(descripcion);
+
+        System.out.print("Nuevo peso en kg [" + orden.getPesoPaquete() + "]: ");
+        String pesoStr = sc.nextLine().trim();
+        if (!pesoStr.isEmpty()) {
+            double nuevoPeso = Double.parseDouble(pesoStr);
+            orden.setPesoPaquete(nuevoPeso);
+        }
+
+        System.out.print("Nuevo destino X [" + orden.getDestinoX() + "]: ");
+        String xStr = sc.nextLine().trim();
+        if (!xStr.isEmpty()) {
+            int nuevoX = Integer.parseInt(xStr);
+            if (nuevoX < 0 || nuevoX > 9) {
+                System.out.println("Error: destino X debe estar entre 0 y 9. No se modifico.");
+            } else {
+                orden.setDestinoX(nuevoX);
+            }
+        }
+
+        System.out.print("Nuevo destino Y [" + orden.getDestinoY() + "]: ");
+        String yStr = sc.nextLine().trim();
+        if (!yStr.isEmpty()) {
+            int nuevoY = Integer.parseInt(yStr);
+            if (nuevoY < 0 || nuevoY > 9) {
+                System.out.println("Error: destino Y debe estar entre 0 y 9. No se modifico.");
+            } else {
+                orden.setDestinoY(nuevoY);
+            }
+        }
+
+        System.out.println("Orden modificada correctamente.");
+
+    } catch (NumberFormatException e) {
+        System.out.println("Error: debe ingresar valores numericos validos.");
+    } catch (Exception e) {
+        System.out.println("Error inesperado: " + e.getMessage());
+    }
+}
+
+    //         DESASIGNACION DE PEDIDOS (Regla 2)
+    public static void desasignarPedido() {
+    try {
+        System.out.println("\n===== DESASIGNAR PEDIDO =====");
+        System.out.print("Ingrese el ID de la orden a desasignar: ");
+        String idOrden = sc.nextLine().trim();
+
+        int idx = buscarOrdenPorId(idOrden);
+
+        if (idx == -1) {
+            System.out.println("Error: no se encontro ninguna orden con ese ID.");
+            return;
+        }
+
+        Orden orden = ordenes[idx];
+
+        // Solo se puede desasignar si esta "Asignada" (no si ya esta "En Ruta")
+        if (!orden.getEstado().equalsIgnoreCase("Asignada")) {
+            if (orden.getEstado().equalsIgnoreCase("En Ruta")) {
+                System.out.println("Operacion denegada: el vehiculo y su carga estan en transito operativo.");
+            } else {
+                System.out.println("Error: solo se pueden desasignar ordenes en estado 'Asignada'.");
+                System.out.println("Estado actual de la orden: " + orden.getEstado());
+            }
+            return;
+        }
+
+        String vehiculoPrevio = orden.getIdVehiculoAsignado();
+
+        // Liberar el vehiculo si ya no tiene mas ordenes asignadas, lo dejamos disponible
+        orden.setIdVehiculoAsignado(null);
+        orden.setEstado("Pendiente");
+
+        // Si el vehiculo no tiene mas ordenes "Asignada"/"En Ruta" pendientes de entrega, lo regresamos a Disponible
+        int idxVehiculo = buscarVehiculoPorId(vehiculoPrevio);
+        if (idxVehiculo != -1) {
+            boolean tieneOtrasOrdenes = false;
+            for (int i = 0; i < ordenes.length; i++) {
+                if (ordenes[i] != null
+                        && ordenes[i].getIdVehiculoAsignado() != null
+                        && ordenes[i].getIdVehiculoAsignado().equalsIgnoreCase(vehiculoPrevio)) {
+                    tieneOtrasOrdenes = true;
+                    break;
+                }
+            }
+            if (!tieneOtrasOrdenes && vehiculos[idxVehiculo].getEstado().equalsIgnoreCase("Asignada")) {
+                vehiculos[idxVehiculo].setEstado("Disponible");
+            }
+        }
+
+        System.out.println("Pedido desasignado correctamente. La orden volvio a estado 'Pendiente'.");
+
+    } catch (Exception e) {
+        System.out.println("Error inesperado: " + e.getMessage());
+    }
+}
+
     public static void menuSimulacion() {
-    System.out.println("\n===== SIMULACION EN EL MAPA =====");
+    System.out.println("SIMULACION EN EL MAPA");
 
     Orden ordenSeleccionada = null;
 
@@ -579,14 +772,13 @@ public class Main {
         System.out.println();
     }
 
-    System.out.println("------------------------------");
 }
 
     public static void menuConsultas() {
     int opcion;
 
     do {
-        System.out.println("\n===== CONSULTAS Y REPORTES =====");
+        System.out.println("CONSULTAS Y REPORTES");
         System.out.println("1. Vehiculos disponibles");
         System.out.println("2. Vehiculos en ruta");
         System.out.println("3. Ordenes pendientes");
@@ -626,14 +818,13 @@ public class Main {
 }
 
     public static void mostrarVehiculosPorEstado(String estadoBuscado) {
-    System.out.println("\n===== VEHICULOS " + estadoBuscado.toUpperCase() + " =====");
+    System.out.println("VEHICULOS " + estadoBuscado.toUpperCase() + "");
 
     boolean encontrado = false;
 
     for (int i = 0; i < vehiculos.length; i++) {
         if (vehiculos[i] != null && vehiculos[i].getEstado().equalsIgnoreCase(estadoBuscado)) {
             encontrado = true;
-            System.out.println("--------------------------------");
             System.out.println("ID       : " + vehiculos[i].getId());
             System.out.println("Marca    : " + vehiculos[i].getMarca());
             System.out.println("Modelo   : " + vehiculos[i].getModelo());
@@ -648,14 +839,13 @@ public class Main {
 }
 
     public static void mostrarOrdenesPorEstado(String estadoBuscado) {
-    System.out.println("\n===== ORDENES " + estadoBuscado.toUpperCase() + " =====");
+    System.out.println("ORDENES " + estadoBuscado.toUpperCase() + "");
 
     boolean encontrado = false;
 
     for (int i = 0; i < ordenes.length; i++) {
         if (ordenes[i] != null && ordenes[i].getEstado().equalsIgnoreCase(estadoBuscado)) {
             encontrado = true;
-            System.out.println("--------------------------------");
             System.out.println("ID Orden   : " + ordenes[i].getIdOrden());
             System.out.println("Descripcion: " + ordenes[i].getDescripcion());
             System.out.println("Peso       : " + ordenes[i].getPesoPaquete() + " kg");
@@ -674,7 +864,7 @@ public class Main {
     int opcion;
 
     do {
-        System.out.println("\n===== REPORTES HTML =====");
+        System.out.println("REPORTES HTML");
         System.out.println("1. Catalogo de flota operativa");
         System.out.println("2. Manifiesto de carga y envios");
         System.out.println("0. Regresar");
