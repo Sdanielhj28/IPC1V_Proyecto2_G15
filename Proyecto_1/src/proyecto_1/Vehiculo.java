@@ -11,6 +11,8 @@ public class Vehiculo {
     private double capacidadMax;
     private String estado;
     private String imagen;
+    private int actualX;
+    private int actualY;
 
     public Vehiculo(String id, String marca, String modelo, double capacidadMax, String estado, String imagen) {
         this.id = id;
@@ -19,6 +21,8 @@ public class Vehiculo {
         this.capacidadMax = capacidadMax;
         this.estado = estado;
         this.imagen = imagen;
+        this.actualX = 0;
+        this.actualY = 0;
     }
 
     public String getId() { return id; }
@@ -27,10 +31,14 @@ public class Vehiculo {
     public double getCapacidadMax() { return capacidadMax; }
     public String getEstado() { return estado; }
     public String getImagen() { return imagen; }
+    public int getActualX() { return actualX; }
+    public int getActualY() { return actualY; }
 
     public void setMarca(String marca) { this.marca = marca; }
     public void setModelo(String modelo) { this.modelo = modelo; }
     public void setCapacidadMax(double capacidadMax) { this.capacidadMax = capacidadMax; }
     public void setEstado(String estado) { this.estado = estado; }
     public void setImagen(String imagen) { this.imagen = imagen; }
+    public void setActualX(int actualX) { this.actualX = actualX; }
+    public void setActualY(int actualY) { this.actualY = actualY; }
 }

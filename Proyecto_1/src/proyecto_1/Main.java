@@ -13,6 +13,7 @@ public class Main {
 
     public static Vehiculo[] vehiculos = new Vehiculo[25];
     public static Orden[] ordenes = new Orden[50];
+    public static Orden ordenSeleccionadaSimulacion = null;
 
     public static Scanner sc = new Scanner(System.in);
 
@@ -118,6 +119,8 @@ public class Main {
             } catch (Exception e) {
                 System.out.println("Debe ingresar un numero.");
                 opcion = -1;
+            } finally{
+                System.out.println("Operacion de menu finalizada.");
             }
 
         } while (opcion != 0);
@@ -202,6 +205,8 @@ public class Main {
             System.out.println("Error: la capacidad maxima debe ser un numero valido.");
         } catch (Exception e) {
             System.out.println("Error inesperado al leer el archivo: " + e.getMessage());
+        } finally{
+            System.out.println("Operacion finalizada.");
         }
     }
 
@@ -247,6 +252,8 @@ public class Main {
 
         } catch (Exception e) {
             System.out.println("Error: dato invalido.");
+        } finally {
+            System.out.println("Operacion finalizada.");
         }
     }
 
@@ -302,6 +309,8 @@ public class Main {
             System.out.println("Error: la capacidad debe ser un numero valido.");
         } catch (Exception e) {
             System.out.println("Error inesperado: " + e.getMessage());
+        } finally{
+            System.out.println("Operacion finalizada.");
         }
     }
 
@@ -339,6 +348,8 @@ public class Main {
 
         } catch (Exception e) {
             System.out.println("Error inesperado: " + e.getMessage());
+        } finally{
+            System.out.println("Operacion finalizada.");
         }
     }
 
@@ -377,7 +388,7 @@ public class Main {
     }
 
     // =========================================================
-    //         MÓDULOS PENDIENTES (mañana)
+    //         MÓDULOS
     // =========================================================
 
     public static void menuOrdenes() {
@@ -387,6 +398,7 @@ public class Main {
         System.out.println("\n===== ORDENES DE ENVIO =====");
         System.out.println("1. Crear orden");
         System.out.println("2. Mostrar ordenes");
+        System.out.println("3. Asignar orden a vehiculo");
         System.out.println("0. Regresar");
         System.out.print("Seleccione una opcion: ");
 
@@ -400,6 +412,9 @@ public class Main {
                 case 2:
                     mostrarOrdenes();
                     break;
+                case 3:
+                    asignarOrdenAVehiculo();
+                    break;
                 case 0:
                     System.out.println("Regresando al menu principal...");
                     break;
@@ -410,6 +425,8 @@ public class Main {
         } catch (Exception e) {
             System.out.println("Debe ingresar un numero.");
             opcion = -1;
+        } finally{
+            System.out.println("Operacion de menu finalizada.");
         }
 
     } while (opcion != 0);
@@ -457,8 +474,11 @@ public class Main {
         System.out.println("Error: debe ingresar numeros validos.");
     } catch (Exception e) {
         System.out.println("Error inesperado: " + e.getMessage());
+    } finally {
+        System.out.println("Operacion finalizada.");
     }
 }
+    
     public static int buscarOrdenPorId(String idOrden) {
     for (int i = 0; i < ordenes.length; i++) {
         if (ordenes[i] != null && ordenes[i].getIdOrden().equalsIgnoreCase(idOrden)) {
@@ -482,7 +502,13 @@ public class Main {
             System.out.println("Peso       : " + ordenes[i].getPesoPaquete() + " kg");
             System.out.println("Destino    : (" + ordenes[i].getDestinoX() + ", " + ordenes[i].getDestinoY() + ")");
             System.out.println("Estado     : " + ordenes[i].getEstado());
-            System.out.println("Vehiculo   : " + ordenes[i].getIdVehiculoAsignado());
+            String vehiculo = ordenes[i].getIdVehiculoAsignado();
+
+        if (vehiculo == null) {
+            vehiculo = "Sin asignar";
+    }
+
+System.out.println("Vehiculo   : " + vehiculo);
         }
     }
 
@@ -491,75 +517,239 @@ public class Main {
     }
 }
 
-    public static void menuSimulacion() {
-    System.out.println("\n===== SIMULACION EN EL MAPA =====");
+    public static void asignarOrdenAVehiculo() {
+    try {
+        System.out.println("\n===== ASIGNAR ORDEN A VEHICULO =====");
 
-    Orden ordenSeleccionada = null;
+        System.out.print("Ingrese ID de la orden: ");
+        String idOrden = sc.nextLine();
+
+        int indiceOrden = buscarOrdenPorId(idOrden);
+
+        if (indiceOrden == -1) {
+            System.out.println("No existe una orden con ese ID.");
+            return;
+        }
+
+        Orden orden = ordenes[indiceOrden];
+
+        if (!orden.getEstado().equalsIgnoreCase("Pendiente")) {
+            System.out.println("Solo se pueden asignar ordenes pendientes.");
+            return;
+        }
+
+        System.out.print("Ingrese ID del vehiculo: ");
+        String idVehiculo = sc.nextLine();
+
+        int indiceVehiculo = buscarVehiculoPorId(idVehiculo);
+
+        if (indiceVehiculo == -1) {
+            System.out.println("No existe un vehiculo con ese ID.");
+            return;
+        }
+
+        Vehiculo vehiculo = vehiculos[indiceVehiculo];
+
+        if (!vehiculo.getEstado().equalsIgnoreCase("Disponible")) {
+            System.out.println("El vehiculo no esta disponible.");
+            return;
+        }
+
+        if (vehiculo.getCapacidadMax() < orden.getPesoPaquete()) {
+            System.out.println("El vehiculo no tiene capacidad suficiente.");
+            return;
+        }
+
+        orden.setIdVehiculoAsignado(vehiculo.getId());
+        orden.setEstado("Asignada");
+
+        System.out.println("Orden asignada correctamente.");
+
+    } catch (Exception e) {
+        System.out.println("Error al asignar orden: " + e.getMessage());
+    } finally {
+        System.out.println("Operacion finalizada.");
+    }
+}
+    
+    public static void menuSimulacion() {
+    int opcion;
+
+    do {
+        System.out.println("\n===== SIMULACION EN EL MAPA =====");
+        System.out.println("1. Seleccionar orden");
+        System.out.println("2. Iniciar / Reanudar simulacion");
+        System.out.println("3. Cancelar seleccion");
+        System.out.println("0. Regresar");
+        System.out.print("Seleccione una opcion: ");
+
+        try {
+            opcion = Integer.parseInt(sc.nextLine());
+
+            switch (opcion) {
+                case 1:
+                    seleccionarOrdenSimulacion();
+                    break;
+                case 2:
+                    iniciarSimulacionMapa();
+                    break;
+                case 3:
+                    ordenSeleccionadaSimulacion = null;
+                    System.out.println("Seleccion cancelada.");
+                    break;
+                case 0:
+                    System.out.println("Regresando al menu principal...");
+                    break;
+                default:
+                    System.out.println("Opcion invalida.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Debe ingresar un numero.");
+            opcion = -1;
+        } finally{
+            System.out.println("Operacion de menu finalizada.");
+        }
+
+    } while (opcion != 0);
+}
+    
+    public static void seleccionarOrdenSimulacion() {
+    System.out.println("\n===== SELECCIONAR ORDEN =====");
+
+    boolean hayOrdenes = false;
 
     for (int i = 0; i < ordenes.length; i++) {
-        if (ordenes[i] != null && ordenes[i].getEstado().equalsIgnoreCase("Pendiente")) {
-            ordenSeleccionada = ordenes[i];
-            break;
+        if (ordenes[i] != null &&
+            (ordenes[i].getEstado().equalsIgnoreCase("Asignada") ||
+             ordenes[i].getEstado().equalsIgnoreCase("En Ruta"))) {
+
+            hayOrdenes = true;
+            System.out.println("--------------------------------");
+            System.out.println("ID Orden : " + ordenes[i].getIdOrden());
+            System.out.println("Estado   : " + ordenes[i].getEstado());
+            System.out.println("Vehiculo : " + ordenes[i].getIdVehiculoAsignado());
+            System.out.println("Destino  : (" + ordenes[i].getDestinoX() + ", " + ordenes[i].getDestinoY() + ")");
         }
     }
 
-    if (ordenSeleccionada == null) {
-        System.out.println("No hay ordenes pendientes para simular.");
+    if (!hayOrdenes) {
+        System.out.println("No hay ordenes Asignadas o En Ruta.");
         return;
     }
 
-    Vehiculo vehiculoSeleccionado = null;
+    System.out.print("Ingrese el ID de la orden: ");
+    String idOrden = sc.nextLine();
 
-    for (int i = 0; i < vehiculos.length; i++) {
-        if (vehiculos[i] != null
-                && vehiculos[i].getEstado().equalsIgnoreCase("Disponible")
-                && vehiculos[i].getCapacidadMax() >= ordenSeleccionada.getPesoPaquete()) {
+    int indiceOrden = buscarOrdenPorId(idOrden);
 
-            vehiculoSeleccionado = vehiculos[i];
-            break;
-        }
-    }
-
-    if (vehiculoSeleccionado == null) {
-        System.out.println("No hay vehiculo disponible con capacidad suficiente.");
+    if (indiceOrden == -1) {
+        System.out.println("No existe una orden con ese ID.");
         return;
     }
 
-    ordenSeleccionada.setIdVehiculoAsignado(vehiculoSeleccionado.getId());
-    ordenSeleccionada.setEstado("En Ruta");
-    vehiculoSeleccionado.setEstado("En Ruta");
+    Orden orden = ordenes[indiceOrden];
 
-    int x = 0;
-    int y = 0;
-
-    System.out.println("Orden asignada: " + ordenSeleccionada.getIdOrden());
-    System.out.println("Vehiculo asignado: " + vehiculoSeleccionado.getId());
-    System.out.println("Destino: (" + ordenSeleccionada.getDestinoX() + ", " + ordenSeleccionada.getDestinoY() + ")");
-
-    while (x != ordenSeleccionada.getDestinoX() || y != ordenSeleccionada.getDestinoY()) {
-
-        if (x < ordenSeleccionada.getDestinoX()) {
-            x++;
-        } else if (x > ordenSeleccionada.getDestinoX()) {
-            x--;
-        }
-
-        if (y < ordenSeleccionada.getDestinoY()) {
-            y++;
-        } else if (y > ordenSeleccionada.getDestinoY()) {
-            y--;
-        }
-
-        mostrarMapa(x, y, ordenSeleccionada.getDestinoX(), ordenSeleccionada.getDestinoY());
+    if (!orden.getEstado().equalsIgnoreCase("Asignada") &&
+        !orden.getEstado().equalsIgnoreCase("En Ruta")) {
+        System.out.println("Solo puede seleccionar ordenes en estado Asignada o En Ruta.");
+        return;
     }
+
+    if (orden.getIdVehiculoAsignado() == null) {
+        System.out.println("La orden no tiene vehiculo asignado.");
+        return;
+    }
+
+    int indiceVehiculo = buscarVehiculoPorId(orden.getIdVehiculoAsignado());
+
+    if (indiceVehiculo == -1) {
+        System.out.println("El vehiculo asignado no existe.");
+        return;
+    }
+
+    Vehiculo vehiculo = vehiculos[indiceVehiculo];
+
+    for (int i = 0; i < ordenes.length; i++) {
+        if (ordenes[i] != null &&
+            ordenes[i] != orden &&
+            ordenes[i].getIdVehiculoAsignado() != null &&
+            ordenes[i].getIdVehiculoAsignado().equalsIgnoreCase(vehiculo.getId()) &&
+            ordenes[i].getEstado().equalsIgnoreCase("En Ruta")) {
+
+            System.out.println("Este vehiculo ya tiene otra orden en ruta.");
+            return;
+        }
+    }
+
+    ordenSeleccionadaSimulacion = orden;
+    System.out.println("Orden seleccionada correctamente.");
+}
+    
+    public static void iniciarSimulacionMapa() {
+    if (ordenSeleccionadaSimulacion == null) {
+        System.out.println("Primero debe seleccionar una orden.");
+        return;
+    }
+
+    Orden orden = ordenSeleccionadaSimulacion;
+    int indiceVehiculo = buscarVehiculoPorId(orden.getIdVehiculoAsignado());
+
+    if (indiceVehiculo == -1) {
+        System.out.println("No se encontro el vehiculo asignado.");
+        return;
+    }
+
+    Vehiculo vehiculo = vehiculos[indiceVehiculo];
+
+    orden.setEstado("En Ruta");
+    vehiculo.setEstado("En Ruta");
+
+    System.out.println("\nSimulacion iniciada.");
+    System.out.println("Presione ENTER para avanzar un paso.");
+    System.out.println("Escriba SALIR para pausar la simulacion.");
+
+    while (vehiculo.getActualX() != orden.getDestinoX() ||
+           vehiculo.getActualY() != orden.getDestinoY()) {
+
+        mostrarMapa(vehiculo.getActualX(), vehiculo.getActualY(), orden.getDestinoX(), orden.getDestinoY());
+
+        System.out.print("Comando: ");
+        String comando = sc.nextLine();
+
+        if (comando.equalsIgnoreCase("SALIR")) {
+            System.out.println("Simulacion pausada. Podra reanudarse despues.");
+            return;
+        }
+
+        if (!comando.isEmpty()) {
+            System.out.println("Comando invalido. Presione ENTER o escriba SALIR.");
+            continue;
+        }
+
+        if (vehiculo.getActualX() < orden.getDestinoX()) {
+            vehiculo.setActualX(vehiculo.getActualX() + 1);
+        } else if (vehiculo.getActualX() > orden.getDestinoX()) {
+            vehiculo.setActualX(vehiculo.getActualX() - 1);
+        } else if (vehiculo.getActualY() < orden.getDestinoY()) {
+            vehiculo.setActualY(vehiculo.getActualY() + 1);
+        } else if (vehiculo.getActualY() > orden.getDestinoY()) {
+            vehiculo.setActualY(vehiculo.getActualY() - 1);
+        }
+    }
+
+    mostrarMapa(vehiculo.getActualX(), vehiculo.getActualY(), orden.getDestinoX(), orden.getDestinoY());
 
     System.out.println("Entrega completada correctamente.");
 
-    ordenSeleccionada.setEstado("Entregada");
-    vehiculoSeleccionado.setEstado("Disponible");
+    orden.setEstado("Entregada");
+    vehiculo.setEstado("Disponible");
+    ordenSeleccionadaSimulacion = null;
+    vehiculo.setActualX(0);
+    vehiculo.setActualY(0);
 }
     
-    public static void mostrarMapa(int vehiculoX, int vehiculoY, int destinoX, int destinoY) {
+public static void mostrarMapa(int vehiculoX, int vehiculoY, int destinoX, int destinoY) {
     int filas = 10;
     int columnas = 10;
 
@@ -568,10 +758,14 @@ public class Main {
     for (int y = 0; y < filas; y++) {
         for (int x = 0; x < columnas; x++) {
 
-            if (x == vehiculoX && y == vehiculoY) {
+            if (x == 0 && y == 0 && x == vehiculoX && y == vehiculoY) {
                 System.out.print(" V ");
+            } else if (x == vehiculoX && y == vehiculoY) {
+                System.out.print(" V ");
+            } else if (x == 0 && y == 0) {
+                System.out.print(" H ");
             } else if (x == destinoX && y == destinoY) {
-                System.out.print(" D ");
+                System.out.print(" X ");
             } else {
                 System.out.print(" . ");
             }
@@ -587,10 +781,11 @@ public class Main {
 
     do {
         System.out.println("\n===== CONSULTAS Y REPORTES =====");
-        System.out.println("1. Vehiculos disponibles");
-        System.out.println("2. Vehiculos en ruta");
-        System.out.println("3. Ordenes pendientes");
-        System.out.println("4. Ordenes entregadas");
+        System.out.println("1. Busqueda detallada de vehiculo por ID");
+        System.out.println("2. Vista de flota por defecto");
+        System.out.println("3. Vista de flota ordenada por capacidad");
+        System.out.println("4. Vista de flota ordenada por marca");
+        System.out.println("5. Historial de ordenes agrupado por estado");
         System.out.println("0. Regresar");
         System.out.print("Seleccione una opcion: ");
 
@@ -599,16 +794,19 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-                    mostrarVehiculosPorEstado("Disponible");
+                    buscarVehiculoDetallado();
                     break;
                 case 2:
-                    mostrarVehiculosPorEstado("En Ruta");
+                    vistaFlotaDefecto();
                     break;
                 case 3:
-                    mostrarOrdenesPorEstado("Pendiente");
+                    vistaFlotaPorCapacidad();
                     break;
                 case 4:
-                    mostrarOrdenesPorEstado("Entregada");
+                    vistaFlotaPorMarca();
+                    break;
+                case 5:
+                    historialOrdenesAgrupado();
                     break;
                 case 0:
                     System.out.println("Regresando al menu principal...");
@@ -620,54 +818,157 @@ public class Main {
         } catch (Exception e) {
             System.out.println("Debe ingresar un numero.");
             opcion = -1;
+        } finally {
+            System.out.println("Operacion de consulta finalizada.");
         }
 
     } while (opcion != 0);
 }
+    public static void buscarVehiculoDetallado() {
+    try {
+        System.out.println("\n===== BUSQUEDA DETALLADA DE VEHICULO =====");
+        System.out.print("Ingrese ID del vehiculo: ");
+        String id = sc.nextLine();
 
-    public static void mostrarVehiculosPorEstado(String estadoBuscado) {
-    System.out.println("\n===== VEHICULOS " + estadoBuscado.toUpperCase() + " =====");
+        int indice = buscarVehiculoPorId(id);
 
-    boolean encontrado = false;
+        if (indice == -1) {
+            System.out.println("No se encontro vehiculo con ese ID.");
+            return;
+        }
 
-    for (int i = 0; i < vehiculos.length; i++) {
-        if (vehiculos[i] != null && vehiculos[i].getEstado().equalsIgnoreCase(estadoBuscado)) {
-            encontrado = true;
-            System.out.println("--------------------------------");
-            System.out.println("ID       : " + vehiculos[i].getId());
-            System.out.println("Marca    : " + vehiculos[i].getMarca());
-            System.out.println("Modelo   : " + vehiculos[i].getModelo());
-            System.out.println("Capacidad: " + vehiculos[i].getCapacidadMax() + " kg");
-            System.out.println("Estado   : " + vehiculos[i].getEstado());
+        Vehiculo v = vehiculos[indice];
+
+        System.out.println("\n===== FICHA TECNICA =====");
+        System.out.println("ID              : " + v.getId());
+        System.out.println("Marca           : " + v.getMarca());
+        System.out.println("Modelo          : " + v.getModelo());
+        System.out.println("Capacidad Max   : " + v.getCapacidadMax() + " kg");
+        System.out.println("Estado          : " + v.getEstado());
+        System.out.println("Imagen          : " + v.getImagen());
+        System.out.println("Posicion actual : (" + v.getActualX() + ", " + v.getActualY() + ")");
+
+    } catch (Exception e) {
+        System.out.println("Error en busqueda: " + e.getMessage());
+    } finally {
+        System.out.println("Busqueda finalizada.");
+    }
+}
+    public static void vistaFlotaDefecto() {
+    System.out.println("\n===== VISTA DE FLOTA POR DEFECTO =====");
+    imprimirTablaVehiculos(vehiculos);
+}
+    public static void vistaFlotaPorCapacidad() {
+    Vehiculo[] copia = copiarVehiculos();
+
+    for (int i = 0; i < copia.length - 1; i++) {
+        for (int j = i + 1; j < copia.length; j++) {
+            if (copia[i] != null && copia[j] != null &&
+                copia[i].getCapacidadMax() > copia[j].getCapacidadMax()) {
+
+                Vehiculo temp = copia[i];
+                copia[i] = copia[j];
+                copia[j] = temp;
+            }
         }
     }
 
-    if (!encontrado) {
-        System.out.println("No hay vehiculos con estado: " + estadoBuscado);
+    System.out.println("\n===== FLOTA ORDENADA POR CAPACIDAD =====");
+    imprimirTablaVehiculos(copia);
+}
+    public static void vistaFlotaPorMarca() {
+    Vehiculo[] copia = copiarVehiculos();
+
+    for (int i = 0; i < copia.length - 1; i++) {
+        for (int j = i + 1; j < copia.length; j++) {
+            if (copia[i] != null && copia[j] != null &&
+                copia[i].getMarca().compareToIgnoreCase(copia[j].getMarca()) > 0) {
+
+                Vehiculo temp = copia[i];
+                copia[i] = copia[j];
+                copia[j] = temp;
+            }
+        }
+    }
+
+    System.out.println("\n===== FLOTA ORDENADA POR MARCA =====");
+    imprimirTablaVehiculos(copia);
+}
+    public static Vehiculo[] copiarVehiculos() {
+    Vehiculo[] copia = new Vehiculo[vehiculos.length];
+
+    for (int i = 0; i < vehiculos.length; i++) {
+        copia[i] = vehiculos[i];
+    }
+
+    return copia;
+}
+    public static void imprimirTablaVehiculos(Vehiculo[] lista) {
+    boolean hayVehiculos = false;
+
+    System.out.println("--------------------------------------------------------------------------------");
+    System.out.printf("%-10s %-15s %-20s %-15s %-15s\n", "ID", "Marca", "Modelo", "Capacidad", "Estado");
+    System.out.println("--------------------------------------------------------------------------------");
+
+    for (int i = 0; i < lista.length; i++) {
+        if (lista[i] != null) {
+            hayVehiculos = true;
+
+            System.out.printf("%-10s %-15s %-20s %-15.2f %-15s\n",
+                    lista[i].getId(),
+                    lista[i].getMarca(),
+                    lista[i].getModelo(),
+                    lista[i].getCapacidadMax(),
+                    lista[i].getEstado());
+        }
+    }
+
+    System.out.println("--------------------------------------------------------------------------------");
+
+    if (!hayVehiculos) {
+        System.out.println("No hay vehiculos registrados.");
     }
 }
+    public static void historialOrdenesAgrupado() {
+    System.out.println("\n===== HISTORIAL DE ORDENES AGRUPADO =====");
 
-    public static void mostrarOrdenesPorEstado(String estadoBuscado) {
-    System.out.println("\n===== ORDENES " + estadoBuscado.toUpperCase() + " =====");
-
+    imprimirOrdenesPorEstado("Pendiente");
+    imprimirOrdenesPorEstado("Asignada");
+    imprimirOrdenesPorEstado("En Ruta");
+    imprimirOrdenesPorEstado("Entregada");
+}
+    public static void imprimirOrdenesPorEstado(String estadoBuscado) {
     boolean encontrado = false;
+
+    System.out.println("\n--- ORDENES " + estadoBuscado.toUpperCase() + " ---");
+    System.out.println("------------------------------------------------------------------------------------------------");
+    System.out.printf("%-12s %-25s %-12s %-15s %-15s\n", "ID Orden", "Descripcion", "Peso", "Destino", "Vehiculo");
+    System.out.println("------------------------------------------------------------------------------------------------");
 
     for (int i = 0; i < ordenes.length; i++) {
         if (ordenes[i] != null && ordenes[i].getEstado().equalsIgnoreCase(estadoBuscado)) {
             encontrado = true;
-            System.out.println("--------------------------------");
-            System.out.println("ID Orden   : " + ordenes[i].getIdOrden());
-            System.out.println("Descripcion: " + ordenes[i].getDescripcion());
-            System.out.println("Peso       : " + ordenes[i].getPesoPaquete() + " kg");
-            System.out.println("Destino    : (" + ordenes[i].getDestinoX() + ", " + ordenes[i].getDestinoY() + ")");
-            System.out.println("Estado     : " + ordenes[i].getEstado());
-            System.out.println("Vehiculo   : " + ordenes[i].getIdVehiculoAsignado());
+
+            String vehiculo = ordenes[i].getIdVehiculoAsignado();
+
+            if (vehiculo == null) {
+                vehiculo = "Sin asignar";
+            }
+
+            System.out.printf("%-12s %-25s %-12.2f %-15s %-15s\n",
+                    ordenes[i].getIdOrden(),
+                    ordenes[i].getDescripcion(),
+                    ordenes[i].getPesoPaquete(),
+                    "(" + ordenes[i].getDestinoX() + "," + ordenes[i].getDestinoY() + ")",
+                    vehiculo);
         }
     }
 
     if (!encontrado) {
-        System.out.println("No hay ordenes con estado: " + estadoBuscado);
+        System.out.println("No hay ordenes en estado " + estadoBuscado + ".");
     }
+
+    System.out.println("------------------------------------------------------------------------------------------------");
 }
 
     public static void menuReportesHTML() {
@@ -700,6 +1001,8 @@ public class Main {
         } catch (Exception e) {
             System.out.println("Debe ingresar un numero.");
             opcion = -1;
+        } finally{
+            System.out.println("Operacion de menu finalizada.");
         }
 
     } while (opcion != 0);
@@ -780,8 +1083,11 @@ public class Main {
 
     } catch (Exception e) {
         System.out.println("Error al generar reporte de flota: " + e.getMessage());
+    } finally {
+        System.out.println("Operacion finalizada.");
     }
 }
+    
   public static void generarReporteManifiestoHTML() {
     try {
         FileWriter archivo = new FileWriter("reporte_manifiesto_envios.html");
@@ -887,6 +1193,8 @@ public class Main {
 
     } catch (Exception e) {
         System.out.println("Error al generar manifiesto: " + e.getMessage());
+    } finally {
+        System.out.println("Operacion finalizada.");
     }
   } 
 }
