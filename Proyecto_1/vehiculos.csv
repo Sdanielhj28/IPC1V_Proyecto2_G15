@@ -1,6 +1,0 @@
-id,marca,modelo,capacidadMax,estado,imagen
-V01,Hino,2025,3500.0,Disponible,img/hino.png
-V02,Toyota,Dyna,3000.0,Disponible,img/dyna.png
-V03,Ford,F-350,2800.0,Mantenimiento,img/ford.png
-V04,Isuzu,NPR,4000.0,Disponible,img/isuzu.png
-V05,Mercedes,Atego,5000.0,Disponible,img/mercedes.png
