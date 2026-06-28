@@ -8,4 +8,5 @@ import java.util.ArrayList;
  */
 public class SistemaDatos {
     public static ArrayList<Investigador> investigadores = new ArrayList<>();
+    public static ArrayList<Muestra> muestras = new ArrayList<>();
 }
