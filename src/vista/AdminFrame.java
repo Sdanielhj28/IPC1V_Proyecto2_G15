@@ -17,6 +17,7 @@ public class AdminFrame extends javax.swing.JFrame {
 
     public AdminFrame() {
         initComponents();
+        cargarCombosAsignacion();
     }
 
     @SuppressWarnings("unchecked")
@@ -30,12 +31,18 @@ public class AdminFrame extends javax.swing.JFrame {
         btnNuevo = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        btnCargarInvestigador = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaMuestras = new javax.swing.JTable();
         btnCrearMuestra = new javax.swing.JButton();
         btnCargarMuestra = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        txtInvestigador = new javax.swing.JLabel();
+        comboInvestigador = new javax.swing.JComboBox<>();
+        txtMuestra = new javax.swing.JLabel();
+        comboMuestra = new javax.swing.JComboBox<>();
+        btnAsignar = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         btnCrearPatron = new javax.swing.JButton();
         btnCargarPatron = new javax.swing.JButton();
@@ -72,22 +79,24 @@ public class AdminFrame extends javax.swing.JFrame {
         btnEliminar.setText("Eliminar");
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
 
+        btnCargarInvestigador.setText("Cargar");
+        btnCargarInvestigador.addActionListener(this::btnCargarInvestigadorActionPerformed);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 938, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnNuevo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEliminar)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addComponent(btnNuevo)
+                .addGap(18, 18, 18)
+                .addComponent(btnCargarInvestigador)
+                .addGap(18, 18, 18)
+                .addComponent(btnEditar)
+                .addGap(18, 18, 18)
+                .addComponent(btnEliminar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,10 +105,10 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNuevo)
                     .addComponent(btnEditar)
-                    .addComponent(btnEliminar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(btnEliminar)
+                    .addComponent(btnCargarInvestigador))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         btnNuevo.getAccessibleContext().setAccessibleName("");
@@ -128,6 +137,7 @@ public class AdminFrame extends javax.swing.JFrame {
         btnCrearMuestra.addActionListener(this::btnCrearMuestraActionPerformed);
 
         btnCargarMuestra.setText("Cargar");
+        btnCargarMuestra.addActionListener(this::btnCargarMuestraActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -152,29 +162,69 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addContainerGap(548, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                    .addGap(0, 125, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGap(0, 115, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jTabbedPane1.addTab("Muestras", jPanel2);
+
+        txtInvestigador.setText("Investigador");
+
+        comboInvestigador.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        txtMuestra.setText("Muestra");
+
+        comboMuestra.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        btnAsignar.setText("Asignar");
+        btnAsignar.addActionListener(this::btnAsignarActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 950, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(267, 267, 267)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtInvestigador)
+                            .addComponent(txtMuestra))
+                        .addGap(231, 231, 231)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(comboMuestra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(comboInvestigador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(403, 403, 403)
+                        .addComponent(btnAsignar)))
+                .addContainerGap(310, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 615, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(comboInvestigador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtInvestigador))
+                        .addGap(74, 74, 74)
+                        .addComponent(txtMuestra))
+                    .addComponent(comboMuestra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addComponent(btnAsignar)
+                .addContainerGap(369, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Asignación de experimentos", jPanel3);
+
+        jPanel4.setPreferredSize(new java.awt.Dimension(750, 615));
 
         btnCrearPatron.setText("Crear");
         btnCrearPatron.addActionListener(this::btnCrearPatronActionPerformed);
 
         btnCargarPatron.setText("Cargar");
+        btnCargarPatron.addActionListener(this::btnCargarPatronActionPerformed);
 
         tablaPatrones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -203,8 +253,8 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addComponent(btnCrearPatron)
                 .addGap(18, 18, 18)
                 .addComponent(btnCargarPatron)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
+                .addContainerGap(774, Short.MAX_VALUE))
+            .addComponent(jScrollPane3)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,8 +263,8 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCrearPatron)
                     .addComponent(btnCargarPatron))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("Patrones", jPanel4);
@@ -285,9 +335,182 @@ ventana.setLocationRelativeTo(null);
         ventana.setVisible(true);
         ventana.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnCrearPatronActionPerformed
+
+    private void btnCargarPatronActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarPatronActionPerformed
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == javax.swing.JFileChooser.APPROVE_OPTION) {
+            java.io.File archivo = fileChooser.getSelectedFile();
+
+            try {
+                java.util.Scanner scanner = new java.util.Scanner(archivo);
+
+                while (scanner.hasNextLine()) {
+                String linea = scanner.nextLine();
+
+                String[] partes = linea.split(",", 3);
+
+                if (partes.length < 3) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Formato CSV incorrecto");
+                    scanner.close();
+                    return;
+                }
+
+                String codigo = partes[0].trim();
+                String nombre = partes[1].trim();
+                String textoMatriz = partes[2].trim();
+
+                int[][] matriz = util.CSVUtil.convertirTextoAMatriz(textoMatriz);
+
+                Patron patron = new Patron(codigo, nombre, matriz);
+                SistemaDatos.patrones.add(patron);
+            }
+                actualizarTablaPatrones();
+
+                javax.swing.JOptionPane.showMessageDialog(this, "Patrón cargado correctamente");
+            
+
+            scanner.close();
+
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+      }
+    }//GEN-LAST:event_btnCargarPatronActionPerformed
+
+    private void btnCargarMuestraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarMuestraActionPerformed
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        int resultado = fileChooser.showOpenDialog(this);
+
+        if (resultado == javax.swing.JFileChooser.APPROVE_OPTION) {
+            java.io.File archivo = fileChooser.getSelectedFile();
+
+            try {
+                java.util.Scanner scanner = new java.util.Scanner(archivo);
+
+                while (scanner.hasNextLine()) {
+                    String linea = scanner.nextLine();
+
+                    String[] partes = linea.split(",", 4);
+
+                    if (partes.length < 4) {
+                        javax.swing.JOptionPane.showMessageDialog(this, "Formato CSV incorrecto");
+                        scanner.close();
+                        return;
+                    }
+
+                    String codigo = partes[0].trim();
+                    String descripcion = partes[1].trim();
+                    String estado = partes[2].trim();
+                    String textoMatriz = partes[3].trim();
+
+                    int[][] matriz = util.CSVUtil.convertirTextoAMatriz(textoMatriz);
+
+                    Muestra muestra = new Muestra(codigo, descripcion, estado, matriz);
+                    SistemaDatos.muestras.add(muestra);
+
+                    actualizarTablaMuestras();
+                    cargarCombosAsignacion();
+                }
+                
+                javax.swing.JOptionPane.showMessageDialog(this, "Muestra cargada correctamente");
+
+                scanner.close();
+
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            }
+        }
+        
+    }//GEN-LAST:event_btnCargarMuestraActionPerformed
+
+    private void btnCargarInvestigadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarInvestigadorActionPerformed
+        javax.swing.JFileChooser fileChooser = new javax.swing.JFileChooser();
+        int seleccion = fileChooser.showOpenDialog(this);
+        
+        if (seleccion == javax.swing.JFileChooser.APPROVE_OPTION) {
+            java.io.File archivo = fileChooser.getSelectedFile();
+            
+            try {
+                java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(archivo));
+                String linea;
+                
+                boolean primeraLinea = true;
+
+                while ((linea = br.readLine()) != null) {
+
+                    if (primeraLinea) {
+                        primeraLinea = false;
+                        continue;
+                    }
+
+                    String[] datos = linea.split(",");
+
+                    String codigo = datos[0].trim();
+                    String nombre = datos[1].trim();
+                    String genero = datos[2].trim();
+                    int experimentos = Integer.parseInt(datos[3].trim());
+                    String password = datos[4].trim();
+                    
+                    modelo.Investigador investigador = new modelo.Investigador(codigo, nombre, genero, password);
+                    investigador.setExperimentos(experimentos);
+                    
+                    modelo.SistemaDatos.investigadores.add(investigador);
+                }
+                
+                br.close();
+                actualizarTablaInvestigadores();
+                cargarCombosAsignacion();
+                
+                javax.swing.JOptionPane.showMessageDialog(this, "Investigadores cargados correctamente");
+                
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al cargar archivo CSV");
+            }
+        }
+    }//GEN-LAST:event_btnCargarInvestigadorActionPerformed
+
+    private void btnAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarActionPerformed
+        if (comboInvestigador.getSelectedItem() == null || comboMuestra.getSelectedItem() == null) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Debe seleccionar investigador y muestra");
+        return;
+        }
+
+        String codigoInvestigador = comboInvestigador.getSelectedItem().toString();
+        String codigoMuestra = comboMuestra.getSelectedItem().toString();
+
+        for (Muestra m : SistemaDatos.muestras) {
+            if (m.getCodigo().equals(codigoMuestra)) {
+
+                if (!m.getCodigoInvestigadorAsignado().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Esta muestra ya fue asignada");
+                return;
+            }
+
+            m.setCodigoInvestigadorAsignado(codigoInvestigador);
+            m.setEstado("En proceso");
+            
+            for (Investigador inv : SistemaDatos.investigadores) {
+            if (inv.getCodigo().equals(codigoInvestigador)) {
+            inv.setExperimentos(inv.getExperimentos() + 1);
+            break;
+        }
+    }
+
+            actualizarTablaMuestras();
+            actualizarTablaInvestigadores();
+            cargarCombosAsignacion();
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Muestra asignada correctamente");
+            return;
+            }
+        }
+    }//GEN-LAST:event_btnAsignarActionPerformed
     
     public void actualizarTablaInvestigadores() {
     DefaultTableModel modelo = (DefaultTableModel) tablaInvestigadores.getModel();
+    
     modelo.setRowCount(0);
 
     for (Investigador inv : SistemaDatos.investigadores) {
@@ -313,6 +536,19 @@ ventana.setLocationRelativeTo(null);
         });
     }
 }
+   
+    public void cargarCombosAsignacion() {
+    comboInvestigador.removeAllItems();
+    comboMuestra.removeAllItems();
+
+    for (Investigador inv : SistemaDatos.investigadores) {
+        comboInvestigador.addItem(inv.getCodigo());
+    }
+
+    for (Muestra m : SistemaDatos.muestras) {
+            comboMuestra.addItem(m.getCodigo());
+    }
+}
     
     public void actualizarTablaPatrones() {
     DefaultTableModel modelo = (DefaultTableModel) tablaPatrones.getModel();
@@ -322,7 +558,7 @@ ventana.setLocationRelativeTo(null);
         modelo.addRow(new Object[]{
             p.getCodigo(),
             p.getNombre(),
-            p.getTipo(),
+            "",
             "Ver"
         });
     }
@@ -351,6 +587,8 @@ ventana.setLocationRelativeTo(null);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAsignar;
+    private javax.swing.JButton btnCargarInvestigador;
     private javax.swing.JButton btnCargarMuestra;
     private javax.swing.JButton btnCargarPatron;
     private javax.swing.JButton btnCrearMuestra;
@@ -358,6 +596,8 @@ ventana.setLocationRelativeTo(null);
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JComboBox<String> comboInvestigador;
+    private javax.swing.JComboBox<String> comboMuestra;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -369,5 +609,7 @@ ventana.setLocationRelativeTo(null);
     private javax.swing.JTable tablaInvestigadores;
     private javax.swing.JTable tablaMuestras;
     private javax.swing.JTable tablaPatrones;
+    private javax.swing.JLabel txtInvestigador;
+    private javax.swing.JLabel txtMuestra;
     // End of variables declaration//GEN-END:variables
 }

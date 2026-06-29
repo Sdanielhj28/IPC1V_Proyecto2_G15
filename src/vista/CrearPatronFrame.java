@@ -106,7 +106,7 @@ public class CrearPatronFrame extends javax.swing.JFrame {
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         String codigo = txtCodigo.getText();
         String nombre = txtNombre.getText();
-        String tipo = comTipo.getSelectedItem().toString();
+        int[][] patron = new int[0][0];
         
         if (codigo.isEmpty() || nombre.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Complete todos los campos");
@@ -120,7 +120,7 @@ public class CrearPatronFrame extends javax.swing.JFrame {
             }
         }
         
-        Patron nuevo = new Patron(codigo, nombre, tipo);
+        Patron nuevo = new Patron(codigo, nombre, patron);
         SistemaDatos.patrones.add(nuevo);
 
         javax.swing.JOptionPane.showMessageDialog(this, "Patrón creado correctamente");

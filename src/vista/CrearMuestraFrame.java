@@ -124,7 +124,8 @@ public class CrearMuestraFrame extends javax.swing.JFrame {
             }
         }
 
-        Muestra nueva = new Muestra(codigo, descripcion, estado);
+        int[][] matriz = new int[0][0];
+        Muestra nueva = new Muestra(codigo, descripcion, estado, matriz);
         SistemaDatos.muestras.add(nueva);
 
         javax.swing.JOptionPane.showMessageDialog(this, "Muestra creada correctamente");
