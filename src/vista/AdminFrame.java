@@ -17,7 +17,21 @@ public class AdminFrame extends javax.swing.JFrame {
 
     public AdminFrame() {
         initComponents();
+        
+        actualizarTablaInvestigadores();
+        actualizarTablaMuestras();
+        actualizarTablaPatrones();
         cargarCombosAsignacion();
+        
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                util.PersistenciaUtil.guardarDatos();
+                System.exit(0);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -131,6 +145,11 @@ public class AdminFrame extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tablaMuestras.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaMuestrasMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablaMuestras);
 
         btnCrearMuestra.setText("Crear");
@@ -240,6 +259,11 @@ public class AdminFrame extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        tablaPatrones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaPatronesMouseClicked(evt);
             }
         });
         jScrollPane3.setViewportView(tablaPatrones);
@@ -507,6 +531,34 @@ ventana.setLocationRelativeTo(null);
             }
         }
     }//GEN-LAST:event_btnAsignarActionPerformed
+
+    private void tablaMuestrasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaMuestrasMouseClicked
+        int fila = tablaMuestras.getSelectedRow();
+        int columna = tablaMuestras.getSelectedColumn();
+
+        if (fila == -1) {
+            return;
+        }
+
+        if (columna == 3) {
+            Muestra muestra = SistemaDatos.muestras.get(fila);
+            generarHTMLMuestra(muestra);
+        }
+    }//GEN-LAST:event_tablaMuestrasMouseClicked
+
+    private void tablaPatronesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPatronesMouseClicked
+        int fila = tablaPatrones.getSelectedRow();
+        int columna = tablaPatrones.getSelectedColumn();
+
+        if (fila == -1) {
+            return;
+        }
+
+        if (columna == 3) {
+            Patron patron = SistemaDatos.patrones.get(fila);
+            generarHTMLPatron(patron);
+        }
+    }//GEN-LAST:event_tablaPatronesMouseClicked
     
     public void actualizarTablaInvestigadores() {
     DefaultTableModel modelo = (DefaultTableModel) tablaInvestigadores.getModel();
@@ -561,6 +613,67 @@ ventana.setLocationRelativeTo(null);
             "",
             "Ver"
         });
+    }
+}
+    
+    public void generarHTMLMuestra(Muestra muestra) {
+    try {
+        String nombreArchivo = "Muestra_" + muestra.getCodigo() + ".html";
+        java.io.PrintWriter writer = new java.io.PrintWriter(nombreArchivo);
+
+        writer.println("<html><body>");
+        writer.println("<h1>Muestra " + muestra.getCodigo() + "</h1>");
+        writer.println("<table border='1'>");
+
+        int[][] matriz = muestra.getMatriz();
+
+        for (int i = 0; i < matriz.length; i++) {
+            writer.println("<tr>");
+            for (int j = 0; j < matriz[i].length; j++) {
+                writer.println("<td>" + matriz[i][j] + "</td>");
+            }
+            writer.println("</tr>");
+        }
+
+        writer.println("</table>");
+        writer.println("</body></html>");
+        writer.close();
+
+        javax.swing.JOptionPane.showMessageDialog(this, "HTML generado: " + nombreArchivo);
+
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Error al generar HTML");
+    }
+}
+    
+    public void generarHTMLPatron(Patron patron) {
+    try {
+        String nombreArchivo = "Patron_" + patron.getCodigo() + ".html";
+        java.io.PrintWriter writer = new java.io.PrintWriter(nombreArchivo);
+
+        writer.println("<html><body>");
+        writer.println("<h1>Patrón " + patron.getCodigo() + "</h1>");
+        writer.println("<h2>" + patron.getNombre() + "</h2>");
+        writer.println("<table border='1'>");
+
+        int[][] matriz = patron.getMatriz();
+
+        for (int i = 0; i < matriz.length; i++) {
+            writer.println("<tr>");
+            for (int j = 0; j < matriz[i].length; j++) {
+                writer.println("<td>" + matriz[i][j] + "</td>");
+            }
+            writer.println("</tr>");
+        }
+
+        writer.println("</table>");
+        writer.println("</body></html>");
+        writer.close();
+
+        javax.swing.JOptionPane.showMessageDialog(this, "HTML generado: " + nombreArchivo);
+
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Error al generar HTML");
     }
 }
     
