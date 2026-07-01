@@ -12,10 +12,26 @@ public class CrearPatronFrame extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CrearPatronFrame.class.getName());
     
     private AdminFrame adminFrame;
+    private int indiceEditar = -1;
+    private boolean modoEditar = false;
     
     public CrearPatronFrame(AdminFrame adminFrame) {
         initComponents();
         this.adminFrame = adminFrame;
+    }
+    
+    public CrearPatronFrame(AdminFrame adminFrame, int indiceEditar) {
+        initComponents();
+        this.adminFrame = adminFrame;
+        this.indiceEditar = indiceEditar;
+        this.modoEditar = true;
+
+        Patron p = SistemaDatos.patrones.get(indiceEditar);
+
+        txtCodigo.setText(p.getCodigo());
+        txtNombre.setText(p.getNombre());
+
+        btnCrear.setText("Actualizar");
     }
     
     public CrearPatronFrame() {
@@ -113,17 +129,26 @@ public class CrearPatronFrame extends javax.swing.JFrame {
             return;
         }
         
-        for (Patron p : SistemaDatos.patrones) {
-            if (p.getCodigo().equals(codigo)) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Ya existe un patrón con ese código");
-                return;
-            }
-        }
-        
-        Patron nuevo = new Patron(codigo, nombre, patron);
-        SistemaDatos.patrones.add(nuevo);
+        for (int i = 0; i < SistemaDatos.patrones.size(); i++) {
+            Patron p = SistemaDatos.patrones.get(i);
 
-        javax.swing.JOptionPane.showMessageDialog(this, "Patrón creado correctamente");
+        if (p.getCodigo().equals(codigo) && i != indiceEditar) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Ya existe un patrón con ese código");
+            return;
+        }
+    }
+
+        if (modoEditar) {
+            Patron p = SistemaDatos.patrones.get(indiceEditar);
+            p.setCodigo(codigo);
+            p.setNombre(nombre);
+        } else {
+            Patron nuevo = new Patron(codigo, nombre, patron);
+            SistemaDatos.patrones.add(nuevo);
+        }
+
+            javax.swing.JOptionPane.showMessageDialog(this, modoEditar ? "Patrón actualizado correctamente" : "Patrón creado correctamente"
+            );
 
         if (adminFrame != null) {
             adminFrame.actualizarTablaPatrones();

@@ -14,6 +14,10 @@ public class Patron implements Serializable {
         this.nombre = nombre;
         this.matriz = matriz;
     }
+    
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     public String getCodigo() { return codigo; }
     public String getNombre() { return nombre; }

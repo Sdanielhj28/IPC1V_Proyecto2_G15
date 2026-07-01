@@ -51,6 +51,8 @@ public class AdminFrame extends javax.swing.JFrame {
         tablaMuestras = new javax.swing.JTable();
         btnCrearMuestra = new javax.swing.JButton();
         btnCargarMuestra = new javax.swing.JButton();
+        btnEditarMuestra = new javax.swing.JButton();
+        btnEliminarMuestra = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         txtInvestigador = new javax.swing.JLabel();
         comboInvestigador = new javax.swing.JComboBox<>();
@@ -62,6 +64,8 @@ public class AdminFrame extends javax.swing.JFrame {
         btnCargarPatron = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaPatrones = new javax.swing.JTable();
+        btnEditarPatron = new javax.swing.JButton();
+        btnEliminarPatron = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -158,6 +162,12 @@ public class AdminFrame extends javax.swing.JFrame {
         btnCargarMuestra.setText("Cargar");
         btnCargarMuestra.addActionListener(this::btnCargarMuestraActionPerformed);
 
+        btnEditarMuestra.setText("Editar");
+        btnEditarMuestra.addActionListener(this::btnEditarMuestraActionPerformed);
+
+        btnEliminarMuestra.setText("Eliminar");
+        btnEliminarMuestra.addActionListener(this::btnEliminarMuestraActionPerformed);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -167,7 +177,11 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addComponent(btnCrearMuestra)
                 .addGap(18, 18, 18)
                 .addComponent(btnCargarMuestra)
-                .addContainerGap(774, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(btnEditarMuestra)
+                .addGap(18, 18, 18)
+                .addComponent(btnEliminarMuestra)
+                .addContainerGap(585, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE))
         );
@@ -177,7 +191,9 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCrearMuestra)
-                    .addComponent(btnCargarMuestra))
+                    .addComponent(btnCargarMuestra)
+                    .addComponent(btnEditarMuestra)
+                    .addComponent(btnEliminarMuestra))
                 .addContainerGap(548, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -210,13 +226,13 @@ public class AdminFrame extends javax.swing.JFrame {
                             .addComponent(txtInvestigador)
                             .addComponent(txtMuestra))
                         .addGap(231, 231, 231)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(comboMuestra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comboInvestigador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(comboInvestigador, 0, 115, Short.MAX_VALUE)
+                            .addComponent(comboMuestra, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(403, 403, 403)
                         .addComponent(btnAsignar)))
-                .addContainerGap(310, Short.MAX_VALUE))
+                .addContainerGap(271, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,6 +284,12 @@ public class AdminFrame extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(tablaPatrones);
 
+        btnEditarPatron.setText("Editar");
+        btnEditarPatron.addActionListener(this::btnEditarPatronActionPerformed);
+
+        btnEliminarPatron.setText("Eliminar");
+        btnEliminarPatron.addActionListener(this::btnEliminarPatronActionPerformed);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -277,8 +299,12 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addComponent(btnCrearPatron)
                 .addGap(18, 18, 18)
                 .addComponent(btnCargarPatron)
-                .addContainerGap(774, Short.MAX_VALUE))
-            .addComponent(jScrollPane3)
+                .addGap(18, 18, 18)
+                .addComponent(btnEditarPatron)
+                .addGap(18, 18, 18)
+                .addComponent(btnEliminarPatron)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -286,7 +312,9 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCrearPatron)
-                    .addComponent(btnCargarPatron))
+                    .addComponent(btnCargarPatron)
+                    .addComponent(btnEditarPatron)
+                    .addComponent(btnEliminarPatron))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -316,14 +344,14 @@ public class AdminFrame extends javax.swing.JFrame {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int fila = tablaInvestigadores.getSelectedRow();
 
-if (fila == -1) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un investigador para editar");
-    return;
-}
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un investigador para editar");
+            return;
+        }
 
-CrearInvestigadorFrame ventana = new CrearInvestigadorFrame(this, fila);
-ventana.setVisible(true);
-ventana.setLocationRelativeTo(null);
+    CrearInvestigadorFrame ventana = new CrearInvestigadorFrame(this, fila);
+    ventana.setVisible(true);
+    ventana.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -559,6 +587,77 @@ ventana.setLocationRelativeTo(null);
             generarHTMLPatron(patron);
         }
     }//GEN-LAST:event_tablaPatronesMouseClicked
+
+    private void btnEditarMuestraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarMuestraActionPerformed
+        int fila = tablaMuestras.getSelectedRow();
+
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una muestra para editar");
+            return;
+        }
+
+        CrearMuestraFrame ventana = new CrearMuestraFrame(this, fila);
+        ventana.setVisible(true);
+        ventana.setLocationRelativeTo(null);
+    }//GEN-LAST:event_btnEditarMuestraActionPerformed
+
+    private void btnEliminarMuestraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarMuestraActionPerformed
+        int fila = tablaMuestras.getSelectedRow();
+
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una muestra para eliminar");
+            return;
+        }
+
+        int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "¿Está segura de eliminar esta muestra?",
+            "Confirmar eliminación",
+            javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
+            SistemaDatos.muestras.remove(fila);
+            actualizarTablaMuestras();
+            cargarCombosAsignacion();
+            javax.swing.JOptionPane.showMessageDialog(this, "Muestra eliminada correctamente");
+        }
+    }//GEN-LAST:event_btnEliminarMuestraActionPerformed
+
+    private void btnEliminarPatronActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarPatronActionPerformed
+        int fila = tablaPatrones.getSelectedRow();
+
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un patrón para eliminar");
+            return;
+        }
+
+        int confirmacion = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "¿Está segura de eliminar este patrón?",
+            "Confirmar eliminación",
+            javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirmacion == javax.swing.JOptionPane.YES_OPTION) {
+            SistemaDatos.patrones.remove(fila);
+            actualizarTablaPatrones();
+            javax.swing.JOptionPane.showMessageDialog(this, "Patrón eliminado correctamente");
+        }
+    }//GEN-LAST:event_btnEliminarPatronActionPerformed
+
+    private void btnEditarPatronActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarPatronActionPerformed
+        int fila = tablaPatrones.getSelectedRow();
+
+        if (fila == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un patrón para editar");
+            return;
+        }
+
+        CrearPatronFrame ventana = new CrearPatronFrame(this, fila);
+        ventana.setVisible(true);
+        ventana.setLocationRelativeTo(null);
+    }//GEN-LAST:event_btnEditarPatronActionPerformed
     
     public void actualizarTablaInvestigadores() {
     DefaultTableModel modelo = (DefaultTableModel) tablaInvestigadores.getModel();
@@ -707,7 +806,11 @@ ventana.setLocationRelativeTo(null);
     private javax.swing.JButton btnCrearMuestra;
     private javax.swing.JButton btnCrearPatron;
     private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEditarMuestra;
+    private javax.swing.JButton btnEditarPatron;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminarMuestra;
+    private javax.swing.JButton btnEliminarPatron;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JComboBox<String> comboInvestigador;
     private javax.swing.JComboBox<String> comboMuestra;

@@ -1,6 +1,7 @@
 package vista;
 
-
+import modelo.Investigador;
+import modelo.SistemaDatos;
 /**
  *
  * @author danie
@@ -65,10 +66,9 @@ public class LoginFrame extends javax.swing.JFrame {
                             .addComponent(txtcodigo, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(187, 187, 187)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(186, 186, 186)
-                        .addComponent(btnLogin)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnLogin)
+                            .addComponent(jLabel1))))
                 .addContainerGap(193, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -84,9 +84,9 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
                     .addComponent(txtpassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(70, 70, 70)
+                .addGap(60, 60, 60)
                 .addComponent(btnLogin)
-                .addGap(84, 84, 84))
+                .addGap(94, 94, 94))
         );
 
         pack();
@@ -105,9 +105,20 @@ public class LoginFrame extends javax.swing.JFrame {
             admin.setVisible(true);
             admin.setLocationRelativeTo(null);
             this.dispose();
-        } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
-        }    
+            return;
+        }
+        
+        for (Investigador inv : SistemaDatos.investigadores) {
+        if (inv.getCodigo().equals(codigo) && inv.getPassword().equals(password)) {
+            InvestigadorFrame investigadorFrame = new InvestigadorFrame(inv);
+            investigadorFrame.setVisible(true);
+            investigadorFrame.setLocationRelativeTo(null);
+            this.dispose();
+            return;
+        }
+    }
+
+    javax.swing.JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**

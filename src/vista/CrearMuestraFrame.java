@@ -11,11 +11,29 @@ public class CrearMuestraFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CrearMuestraFrame.class.getName());
     private AdminFrame adminFrame;
+    private int indiceEditar = -1;
+    private boolean modoEditar = false;
     
     public CrearMuestraFrame(AdminFrame adminFrame) {
-    initComponents();
-    this.adminFrame = adminFrame;
-}
+        initComponents();
+        this.adminFrame = adminFrame;
+    }
+    
+    public CrearMuestraFrame(AdminFrame adminFrame, int indiceEditar) {
+        initComponents();
+        this.adminFrame = adminFrame;
+        this.indiceEditar = indiceEditar;
+        this.modoEditar = true;
+        
+        Muestra m = SistemaDatos.muestras.get(indiceEditar);
+        
+        txtCodigo.setText(m.getCodigo());
+        txtCodigo.setEnabled(false);
+        txtDescripcion.setText(m.getDescripcion());
+        comboEstado.setSelectedItem(m.getEstado());
+
+        btnCrear.setText("Actualizar");
+    }
     
     public CrearMuestraFrame() {
         initComponents();
@@ -117,21 +135,33 @@ public class CrearMuestraFrame extends javax.swing.JFrame {
             return;
         }
 
-        for (Muestra m : SistemaDatos.muestras) {
-            if (m.getCodigo().equals(codigo)) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Ya existe una muestra con ese código");
-                return;
+        if (!modoEditar) {
+            for (Muestra m : SistemaDatos.muestras) {
+                if (m.getCodigo().equals(codigo)) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Ya existe una muestra con ese código");
+                    return;
+                }
             }
         }
 
-        int[][] matriz = new int[0][0];
-        Muestra nueva = new Muestra(codigo, descripcion, estado, matriz);
-        SistemaDatos.muestras.add(nueva);
+        if (modoEditar) {
+            Muestra m = SistemaDatos.muestras.get(indiceEditar);
+            m.setDescripcion(descripcion);
+            m.setEstado(estado);
+        } else {
+            int[][] matriz = new int[0][0];
+            Muestra nueva = new Muestra(codigo, descripcion, estado, matriz);
+            SistemaDatos.muestras.add(nueva);
+        }
 
-        javax.swing.JOptionPane.showMessageDialog(this, "Muestra creada correctamente");
-
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            modoEditar ? "Muestra actualizada correctamente" : "Muestra creada correctamente"
+        );
+        
         if (adminFrame != null) {
             adminFrame.actualizarTablaMuestras();
+            adminFrame.cargarCombosAsignacion();
         }
 
         dispose();

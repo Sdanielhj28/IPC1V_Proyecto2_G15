@@ -85,7 +85,8 @@ public class CrearInvestigadorFrame extends javax.swing.JFrame {
 
         tittle.setText("Crear Investigador");
 
-        cmbGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
+        cmbGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "M", "F" }));
+        cmbGenero.addActionListener(this::cmbGeneroActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -198,6 +199,10 @@ public class CrearInvestigadorFrame extends javax.swing.JFrame {
         
         dispose();
     }//GEN-LAST:event_btnCrearActionPerformed
+
+    private void cmbGeneroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbGeneroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbGeneroActionPerformed
 
     /**
      * @param args the command line arguments
