@@ -41,6 +41,7 @@ public class InvestigadorFrame extends javax.swing.JFrame {
         this.investigador = investigador;
         setTitle("Panel Investigador - " + investigador.getNombre());
         cargarCombos();
+        actualizarTablaResultados();
     }
 
     /**
@@ -60,6 +61,7 @@ public class InvestigadorFrame extends javax.swing.JFrame {
         comboPatron = new javax.swing.JComboBox<>();
         btnAnalizar = new javax.swing.JButton();
         lblResultado = new javax.swing.JLabel();
+        btnCerrarSesion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaResultados = new javax.swing.JTable();
@@ -73,30 +75,40 @@ public class InvestigadorFrame extends javax.swing.JFrame {
         btnAnalizar.setText("Analizar");
         btnAnalizar.addActionListener(this::btnAnalizarActionPerformed);
 
+        lblResultado.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblResultado.setText("Resultado: Pendiente");
+
+        btnCerrarSesion.setText("Cerrar sesión");
+        btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(247, 247, 247)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 263, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(comboMuestra, 0, 110, Short.MAX_VALUE)
-                    .addComponent(comboPatron, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(191, 191, 191))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAnalizar)
-                .addGap(397, 397, 397))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(380, 380, 380)
-                .addComponent(lblResultado)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnAnalizar)
+                        .addGap(397, 397, 397))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnCerrarSesion)
+                        .addGap(380, 380, 380))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(247, 247, 247)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 263, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(comboMuestra, 0, 110, Short.MAX_VALUE)
+                            .addComponent(comboPatron, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(191, 191, 191))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,9 +123,11 @@ public class InvestigadorFrame extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addGap(48, 48, 48)
                 .addComponent(btnAnalizar)
-                .addGap(56, 56, 56)
+                .addGap(50, 50, 50)
                 .addComponent(lblResultado)
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+                .addComponent(btnCerrarSesion)
+                .addGap(45, 45, 45))
         );
 
         jTabbedPane2.addTab("Análisis", jPanel1);
@@ -180,12 +194,121 @@ public class InvestigadorFrame extends javax.swing.JFrame {
         String codigoMuestra = comboMuestra.getSelectedItem().toString();
         String codigoPatron = comboPatron.getSelectedItem().toString();
 
-        lblResultado.setText("Analizando " + codigoMuestra + " con " + codigoPatron);
+        Muestra muestra = null;
+        Patron patron = null;
+
+        for (Muestra m : SistemaDatos.muestras) {
+            if (m.getCodigo().equals(codigoMuestra)) {
+            muestra = m;
+            break;
+            }
+        }
+
+        for (Patron p : SistemaDatos.patrones) {
+            if (p.getCodigo().equals(codigoPatron)) {
+            patron = p;
+            break;
+            }
+        }
+
+        if (muestra == null || patron == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No se encontró muestra o patrón");
+            return;
+        }
+
+        AnalisisFrame ventana = new AnalisisFrame(
+            obtenerMatriz2x2(muestra.getMatriz()),
+            obtenerMatriz2x2(patron.getMatriz()),
+            this,
+            patron.getNombre()
+        );
+
+        ventana.setVisible(true);
     }//GEN-LAST:event_btnAnalizarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        LoginFrame login = new LoginFrame();
+        login.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    public void recibirResultadoAnalisis(boolean coincide, String nombrePatron) {
+        String codigoMuestra = comboMuestra.getSelectedItem().toString();
+        String codigoPatron = comboPatron.getSelectedItem().toString();
+
+        String textoResultado;
+
+        if (coincide) {
+            textoResultado = "Coincide";
+            lblResultado.setText("La muestra coincide con " + nombrePatron);
+        } else {
+            textoResultado = "No coincide";
+            lblResultado.setText("La muestra no coincide con " + nombrePatron);
+        }
+
+        for (Muestra m : SistemaDatos.muestras) {
+            if (m.getCodigo().equals(codigoMuestra)) {
+                m.setEstado("Procesada");
+                break;
+            }
+        }
+
+        java.time.LocalDate fecha = java.time.LocalDate.now();
+        java.time.LocalTime hora = java.time.LocalTime.now();
+
+        int numero = SistemaDatos.resultados.size() + 1;
+
+        modelo.Resultado nuevoResultado = new modelo.Resultado(
+            numero,
+            codigoMuestra,
+            codigoPatron,
+            fecha.toString(),
+            hora.toString().substring(0, 8),
+            textoResultado,
+            investigador.getCodigo()
+        );
+
+        SistemaDatos.resultados.add(nuevoResultado);
+
+        actualizarTablaResultados();
+        cargarCombos();
+        util.PersistenciaUtil.guardarDatos();
+    }
+    
+    public void actualizarTablaResultados() {
+    javax.swing.table.DefaultTableModel modeloTabla =
+            (javax.swing.table.DefaultTableModel) tablaResultados.getModel();
+
+    modeloTabla.setRowCount(0);
+
+    for (modelo.Resultado r : SistemaDatos.resultados) {
+        if (r.getCodigoInvestigador().equals(investigador.getCodigo())) {
+            modeloTabla.addRow(new Object[]{
+                r.getNumeroAnalisis(),
+                r.getCodigoMuestra(),
+                r.getCodigoPatron(),
+                r.getFecha(),
+                r.getHora(),
+                r.getResultado()
+            });
+        }
+    }
+}
+    
+    public int[][] obtenerMatriz2x2(int[][] matriz) {
+    if (matriz != null && matriz.length >= 2 && matriz[0].length >= 2) {
+        return new int[][]{
+            {matriz[0][0], matriz[0][1]},
+            {matriz[1][0], matriz[1][1]}
+        };
+    }
+
+    return new int[][]{
+        {1, 0},
+        {0, 1}
+    };
+}
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -210,6 +333,7 @@ public class InvestigadorFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnalizar;
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JComboBox<String> comboMuestra;
     private javax.swing.JComboBox<String> comboPatron;
     private javax.swing.JLabel jLabel1;

@@ -40,6 +40,10 @@ public class Investigador implements Serializable {
     public int getExperimentos() {
         return experimentos;
     }
+    
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;

@@ -18,6 +18,7 @@ public class PersistenciaUtil {
             out.writeObject(SistemaDatos.investigadores);
             out.writeObject(SistemaDatos.muestras);
             out.writeObject(SistemaDatos.patrones);
+            out.writeObject(SistemaDatos.resultados);
             
             out.close();
         } catch (Exception e) {
@@ -32,6 +33,7 @@ public class PersistenciaUtil {
             SistemaDatos.investigadores = (java.util.ArrayList) in.readObject();
             SistemaDatos.muestras = (java.util.ArrayList) in.readObject();
             SistemaDatos.patrones = (java.util.ArrayList) in.readObject();
+            SistemaDatos.resultados = (java.util.ArrayList) in.readObject();
 
             in.close();
         } catch (Exception e) {

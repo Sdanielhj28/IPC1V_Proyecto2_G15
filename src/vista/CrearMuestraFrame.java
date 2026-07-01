@@ -28,7 +28,7 @@ public class CrearMuestraFrame extends javax.swing.JFrame {
         Muestra m = SistemaDatos.muestras.get(indiceEditar);
         
         txtCodigo.setText(m.getCodigo());
-        txtCodigo.setEnabled(false);
+        // txtCodigo.setEnabled(false);
         txtDescripcion.setText(m.getDescripcion());
         comboEstado.setSelectedItem(m.getEstado());
 
@@ -135,17 +135,18 @@ public class CrearMuestraFrame extends javax.swing.JFrame {
             return;
         }
 
-        if (!modoEditar) {
-            for (Muestra m : SistemaDatos.muestras) {
-                if (m.getCodigo().equals(codigo)) {
+        for (int i = 0; i < SistemaDatos.muestras.size(); i++) {
+                Muestra m = SistemaDatos.muestras.get(i);
+
+                if (m.getCodigo().equals(codigo) && i != indiceEditar) {
                     javax.swing.JOptionPane.showMessageDialog(this, "Ya existe una muestra con ese código");
                     return;
                 }
-            }
         }
 
         if (modoEditar) {
             Muestra m = SistemaDatos.muestras.get(indiceEditar);
+            m.setCodigo(codigo);
             m.setDescripcion(descripcion);
             m.setEstado(estado);
         } else {

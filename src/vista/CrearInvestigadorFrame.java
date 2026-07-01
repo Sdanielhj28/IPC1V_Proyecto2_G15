@@ -36,8 +36,7 @@ public class CrearInvestigadorFrame extends javax.swing.JFrame {
         
         txtCodigo.setText(inv.getCodigo());
         txtCodigo.setEditable(false);
-        txtCodigo.setEnabled(false);
-        
+                
         txtNombre.setText(inv.getNombre());
         cmbGenero.setSelectedItem(inv.getGenero());
         txtPassword.setText(inv.getPassword());
@@ -169,17 +168,19 @@ public class CrearInvestigadorFrame extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Complete todos los campos");
             return;
         }
-        if (!modoEditar) {
-            for (Investigador inv : SistemaDatos.investigadores) {
-                if (inv.getCodigo().equals(codigo)) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Ya existe un investigador con ese código");
-                    return;
-                }
+        
+        for (int i = 0; i < SistemaDatos.investigadores.size(); i++) {
+            Investigador inv = SistemaDatos.investigadores.get(i);
+
+            if (inv.getCodigo().equals(codigo) && i != indiceEditar) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Ya existe un investigador con ese código");
+                return;
             }
         }
         
         if (modoEditar) {
             Investigador inv = SistemaDatos.investigadores.get(indiceEditar);
+            inv.setCodigo(codigo);
             inv.setNombre(nombre);
             inv.setGenero(genero);
             inv.setPassword(password);

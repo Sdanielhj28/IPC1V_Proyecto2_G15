@@ -10,4 +10,5 @@ public class SistemaDatos {
     public static ArrayList<Investigador> investigadores = new ArrayList<>();
     public static ArrayList<Muestra> muestras = new ArrayList<>();
     public static ArrayList<Patron> patrones = new ArrayList<>();
+    public static ArrayList<Resultado> resultados = new ArrayList<>();
 }

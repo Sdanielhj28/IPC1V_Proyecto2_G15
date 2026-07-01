@@ -46,6 +46,7 @@ public class AdminFrame extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnCargarInvestigador = new javax.swing.JButton();
+        btnCerrarSesion = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaMuestras = new javax.swing.JTable();
@@ -100,10 +101,14 @@ public class AdminFrame extends javax.swing.JFrame {
         btnCargarInvestigador.setText("Cargar");
         btnCargarInvestigador.addActionListener(this::btnCargarInvestigadorActionPerformed);
 
+        btnCerrarSesion.setText("Cerrar sesión");
+        btnCerrarSesion.addActionListener(this::btnCerrarSesionActionPerformed);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNuevo)
@@ -113,8 +118,9 @@ public class AdminFrame extends javax.swing.JFrame {
                 .addComponent(btnEditar)
                 .addGap(18, 18, 18)
                 .addComponent(btnEliminar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCerrarSesion)
+                .addGap(33, 33, 33))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -124,7 +130,8 @@ public class AdminFrame extends javax.swing.JFrame {
                     .addComponent(btnNuevo)
                     .addComponent(btnEditar)
                     .addComponent(btnEliminar)
-                    .addComponent(btnCargarInvestigador))
+                    .addComponent(btnCargarInvestigador)
+                    .addComponent(btnCerrarSesion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -658,6 +665,12 @@ public class AdminFrame extends javax.swing.JFrame {
         ventana.setVisible(true);
         ventana.setLocationRelativeTo(null);
     }//GEN-LAST:event_btnEditarPatronActionPerformed
+
+    private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
+        LoginFrame login = new LoginFrame();
+        login.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnCerrarSesionActionPerformed
     
     public void actualizarTablaInvestigadores() {
     DefaultTableModel modelo = (DefaultTableModel) tablaInvestigadores.getModel();
@@ -803,6 +816,7 @@ public class AdminFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnCargarInvestigador;
     private javax.swing.JButton btnCargarMuestra;
     private javax.swing.JButton btnCargarPatron;
+    private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnCrearMuestra;
     private javax.swing.JButton btnCrearPatron;
     private javax.swing.JButton btnEditar;

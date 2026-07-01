@@ -24,6 +24,10 @@ public class Muestra implements Serializable {
     public String getCodigo() {
         return codigo;
     }
+    
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     public String getDescripcion() {
         return descripcion;
